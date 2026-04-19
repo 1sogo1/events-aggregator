@@ -3,7 +3,7 @@ from services.paginator import EventsPaginator
 from repositories.event_repo import EventRepository
 from repositories.sync_repo import SyncRepository
 from sqlalchemy.ext.asyncio import AsyncSession
-from datetime import datetime, timezone
+from datetime import datetime
 from typing import Optional
 
 
