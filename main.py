@@ -30,6 +30,8 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="Events Aggregator", lifespan=lifespan)
 
+app.router.redirect_slashes = False
+
 app.include_router(health.router)
 app.include_router(events.router)
 app.include_router(sync.router)
