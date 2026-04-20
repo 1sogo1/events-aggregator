@@ -6,7 +6,7 @@ from routers import health, events, sync
 async def sync_scheduler():
     while True:
         try:
-            await asyncio.sleep(60)
+            await asyncio.sleep(24*60*60)
             
             from db.database import Session
             from services.provider_client import EventsProviderClient
