@@ -63,3 +63,34 @@ async def register_ticket(
         return {"ticket_id": result.get("ticket_id")}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Registration failed: {str(e)}")
+    
+@router.delete("/tickets/{ticket_id}")
+async def cancel_ticket(
+    ticket_id: str,
+    db: AsyncSession = Depends(get_db)
+):
+    from repositories.ticket_repo import TicketRepository
+    from services.provider_client import EventsProviderClient
+    from services.cache import SeatsCache
+    
+    ticket_repo = TicketRepository(db)
+    ticket = await ticket_repo.get_by_ticket_id(ticket_id)
+    
+    if not ticket:
+        raise HTTPException(status_code=404, detail="Ticket not found")
+    
+    try:
+        client = EventsProviderClient()
+        result = await client.unregister(ticket.event_id, ticket.ticket_id) #type: ignore
+        
+        if result.get("success"):
+            await ticket_repo.delete(ticket.id) #type: ignore
+            
+            seats_cache = SeatsCache()
+            seats_cache.clear(ticket.event_id) #type: ignore
+            
+            return {"success": True}
+        else:
+            raise HTTPException(status_code=500, detail="Unregistration failed")
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Unregistration failed: {str(e)}")
