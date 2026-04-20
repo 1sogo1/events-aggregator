@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import asyncio
-from routers import health, events, sync
+from routers import health, events, sync, tickets
 
 async def sync_scheduler():
     while True:
@@ -34,6 +34,7 @@ app = FastAPI(title="Events Aggregator", lifespan=lifespan)
 app.include_router(health.router)
 app.include_router(events.router)
 app.include_router(sync.router)
+app.include_router(tickets.router)
 
 @app.get("/")
 async def root():
