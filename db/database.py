@@ -4,7 +4,7 @@ import os
 
 load_dotenv()
 
-DB_URL = os.getenv('DATABASE_URL')
+DB_URL = os.getenv('POSTGRES_CONNECTION_STRING')
 
 engine = create_async_engine(str(DB_URL), echo=False)
 
