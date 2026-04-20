@@ -26,7 +26,7 @@ async def register_ticket(
     event = await event_repo.get(request.event_id)
     
     if not event:
-        raise HTTPException(status_code=404, detail="Event not found")
+        raise HTTPException(status_code=400, detail="Event not found")
     
     if event.status != "published": #type: ignore
         raise HTTPException(status_code=400, detail="Registration closed")
