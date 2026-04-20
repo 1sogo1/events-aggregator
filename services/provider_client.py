@@ -16,8 +16,19 @@ class EventsProviderClient:
         if cursor:
             params["cursor"] = cursor
         
-        async with httpx.AsyncClient() as client:
-            response = await client.get(url, params=params, headers={"x-api-key": self.api_key})
+        print(f"API REQUEST: {url}")
+        print(f"API PARAMS: {params}")
+        print(f"API KEY: {self.api_key[:10]}... (length: {len(self.api_key)})")
+        
+        async with httpx.AsyncClient(follow_redirects=True) as client:
+            response = await client.get(
+                url,
+                params=params,
+                headers={"x-api-key": self.api_key}
+            )
+            print(f"API RESPONSE: status={response.status_code}")
+            if response.status_code != 200:
+                print(f"API ERROR BODY: {response.text[:500]}")
             response.raise_for_status()
             return response.json()
     
