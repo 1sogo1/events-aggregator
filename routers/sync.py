@@ -3,22 +3,20 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from db.database import get_db
 from services.provider_client import EventsProviderClient
 from services.sync_service import SyncService
+import asyncio
 
 router = APIRouter(prefix="/api/sync", tags=["sync"])
 
-@router.post("/trigger")
-async def trigger_sync(db: AsyncSession = Depends(get_db)):
-    print("TRIGGER: /api/sync/trigger called")
+async def run_sync_in_background(db: AsyncSession):
     try:
         client = EventsProviderClient()
-        print("TRIGGER: Client created")
         sync_service = SyncService(db, client)
-        print("TRIGGER: SyncService created")
         await sync_service.sync()
-        print("TRIGGER: Sync completed successfully")
-        return {"status": "success", "message": "Sync completed"}
+        print("Background sync completed successfully")
     except Exception as e:
-        print(f"TRIGGER ERROR: {type(e).__name__}: {e}")
-        import traceback
-        traceback.print_exc()
-        return {"status": "error", "message": str(e)}
+        print(f"Background sync error: {e}")
+
+@router.post("/trigger")
+async def trigger_sync(db: AsyncSession = Depends(get_db)):
+    asyncio.create_task(run_sync_in_background(db))
+    return {"status": "success", "message": "Sync started in background"}
