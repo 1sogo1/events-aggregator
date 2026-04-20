@@ -12,12 +12,14 @@ from repositories.ticket_repo import TicketRepository
 router = APIRouter(prefix="/api/events", tags=["events"])
 
 @router.get("/")
+@router.get("")
 async def get_events(
     date_from: Optional[str] = None,
     page: int = 1,
     page_size: int = 20,
     db: AsyncSession = Depends(get_db)
 ):
+    print(f"GET /api/events called with page={page}, date_from={date_from}")
     repo = EventRepository(db)
     events, total = await repo.list_with_filters(
         date_from=date_from,
