@@ -26,7 +26,7 @@ class EventsProviderClient:
                 headers={"x-api-key": self.api_key}
             )
             response.raise_for_status()
-            return await response.json()
+            return response.json()
     
     async def get_seats(self, event_id: str) -> Dict[str, Any]:
         url = urljoin(self.base_url + '/', f'/api/events/{event_id}/seats/')
@@ -55,7 +55,7 @@ class EventsProviderClient:
                 headers={"x-api-key": self.api_key}
             )
             response.raise_for_status()
-            return await response.json()
+            return response.json()
     
     async def unregister(self, event_id: str, ticket_id: str) -> Dict[str, Any]:
         url = urljoin(self.base_url + '/', f'/api/events/{event_id}/unregister/')
@@ -69,4 +69,4 @@ class EventsProviderClient:
                 headers={"x-api-key": self.api_key}
             )
             response.raise_for_status()
-            return await response.json()
+            return response.json()

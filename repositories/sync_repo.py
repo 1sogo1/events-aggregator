@@ -10,7 +10,6 @@ class SyncRepository:
         self.session = session
     
     async def get_metadata(self) -> SyncMetadata:
-        """Получить метаданные синхронизации (создаёт, если нет)"""
         result = await self.session.execute(
             select(SyncMetadata).where(SyncMetadata.id == "singleton")
         )
@@ -20,6 +19,7 @@ class SyncRepository:
             metadata = SyncMetadata(id="singleton")
             self.session.add(metadata)
             await self.session.commit()
+            await self.session.refresh(metadata)
         
         return metadata
     
@@ -29,13 +29,13 @@ class SyncRepository:
         status: str = "success",
         error_message: Optional[str] = None
     ):
-        """Обновить информацию о синхронизации"""
         metadata = await self.get_metadata()
-        metadata.last_sync_at = datetime.now(timezone.utc) # type: ignore
-        metadata.sync_status = status # type: ignore
-        metadata.error_message = error_message # type: ignore
         
+        metadata.last_sync_at = datetime.now(timezone.utc) #type: ignore
+        metadata.sync_status = status #type: ignore
+        metadata.error_message = error_message #type: ignore
+         
         if last_changed_at:
-            metadata.last_changed_at = last_changed_at # type: ignore
+            metadata.last_changed_at = last_changed_at #type: ignore
         
         await self.session.commit()
