@@ -1,6 +1,5 @@
 from cachetools import TTLCache
 
-
 class SeatsCache:
     def __init__(self, ttl_seconds: int = 30):
         self.cache = TTLCache(maxsize=100, ttl=ttl_seconds)
@@ -20,5 +19,4 @@ class SeatsCache:
         key = self._make_key(event_id)
         if key in self.cache:
             del self.cache[key]
-    
     

@@ -1,10 +1,7 @@
 from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
-import os
-from dotenv import load_dotenv
+from config import settings
 
-load_dotenv()
-
-DB_URL = os.getenv("POSTGRES_CONNECTION_STRING") or os.getenv("DATABASE_URL")
+DB_URL = settings.POSTGRES_CONNECTION_STRING
 
 if not DB_URL:
     raise Exception("No database connection string found!")

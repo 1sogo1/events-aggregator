@@ -2,20 +2,20 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 import asyncio
 from routers import health, events, sync, tickets
+from db.database import Session
+from config import settings
+from services.provider_client import EventsProviderClient
+from usecases.sync_usecase import SyncUsecase
 
 async def sync_scheduler():
     while True:
         try:
-            await asyncio.sleep(24*60*60)
-            
-            from db.database import Session
-            from services.provider_client import EventsProviderClient
-            from services.sync_service import SyncService
+            await asyncio.sleep(24 * 60 * 60) 
             
             async with Session() as db:
-                client = EventsProviderClient()
-                sync_service = SyncService(db, client)
-                await sync_service.sync()
+                client = EventsProviderClient(settings.PROVIDER_BASE_URL, settings.PROVIDER_API_KEY)
+                usecase = SyncUsecase(db, client)
+                await usecase.execute()
                 print("Auto-sync completed successfully")
         except Exception as e:
             print(f"Auto-sync error: {e}")
@@ -29,7 +29,6 @@ async def lifespan(app: FastAPI):
     task.cancel()
 
 app = FastAPI(title="Events Aggregator", lifespan=lifespan)
-
 
 app.include_router(health.router)
 app.include_router(events.router)

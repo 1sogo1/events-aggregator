@@ -1,18 +1,18 @@
 from sqlalchemy import Column, String, DateTime, Integer
 from sqlalchemy.orm import declarative_base
-import uuid
 from datetime import datetime
+import uuid
 
 Base = declarative_base()
 
 class Event(Base):
     __tablename__ = "events"
     
-    id = Column(String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    id = Column(String, primary_key=True)
     name = Column(String, nullable=False)
     event_time = Column(DateTime, nullable=False)
     registration_deadline = Column(DateTime, nullable=False)
-    status = Column(String, nullable=False)
+    status = Column(String, nullable=False)  # будет хранить значение из EventStatus
     number_of_visitors = Column(Integer, default=0)
     place_id = Column(String, nullable=False)
     place_name = Column(String)

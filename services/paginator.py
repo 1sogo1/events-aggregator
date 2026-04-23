@@ -1,9 +1,9 @@
 from typing import Dict, Any, Optional
+from urllib.parse import urlparse, parse_qs
 from services.provider_client import EventsProviderClient
 
 
 class EventsPaginator:
-    
     def __init__(self, client: EventsProviderClient, changed_at: str):
         self.client = client
         self.changed_at = changed_at
@@ -41,9 +41,8 @@ class EventsPaginator:
         
         next_url = response.get("next")
         if next_url and "cursor=" in next_url:
-            import urllib.parse
-            parsed = urllib.parse.urlparse(next_url)
-            query_params = urllib.parse.parse_qs(parsed.query)
+            parsed = urlparse(next_url)
+            query_params = parse_qs(parsed.query)
             self._next_cursor = query_params.get("cursor", [None])[0]
         else:
             self._next_cursor = None
