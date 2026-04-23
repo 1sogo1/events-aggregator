@@ -1,4 +1,4 @@
-from fastapi import APIRouter, Depends, Request
+from fastapi import APIRouter, Depends, Request, HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from typing import Optional
 from db.database import get_db
@@ -68,7 +68,7 @@ async def get_event_detail(
     event = await usecase.execute(event_id)
     
     if not event:
-        return {"error": "Event not found"}, 404
+        raise HTTPException(status_code=404, detail="Event not found")
     
     return {
         "id": event.id,
