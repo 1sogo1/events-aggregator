@@ -11,7 +11,10 @@ async def test_get_events():
     mock_response.json = AsyncMock(return_value={"results": [{"id": "123"}], "next": None})
     mock_response.raise_for_status = AsyncMock()
     
-    with patch("httpx.AsyncClient.get", return_value=mock_response):
+    mock_client = AsyncMock()
+    mock_client.get = AsyncMock(return_value=mock_response)
+    
+    with patch("httpx.AsyncClient", return_value=mock_client):
         result = await client.get_events(changed_at="2000-01-01")
         
         assert result["results"][0]["id"] == "123"
@@ -25,7 +28,10 @@ async def test_get_seats():
     mock_response.json = AsyncMock(return_value={"seats": ["A1", "A2"]})
     mock_response.raise_for_status = AsyncMock()
     
-    with patch("httpx.AsyncClient.get", return_value=mock_response):
+    mock_client = AsyncMock()
+    mock_client.get = AsyncMock(return_value=mock_response)
+    
+    with patch("httpx.AsyncClient", return_value=mock_client):
         result = await client.get_seats("event-123")
         
         assert len(result["seats"]) == 2
@@ -39,7 +45,10 @@ async def test_register():
     mock_response.json = AsyncMock(return_value={"ticket_id": "ticket-456"})
     mock_response.raise_for_status = AsyncMock()
     
-    with patch("httpx.AsyncClient.post", return_value=mock_response):
+    mock_client = AsyncMock()
+    mock_client.post = AsyncMock(return_value=mock_response)
+    
+    with patch("httpx.AsyncClient", return_value=mock_client):
         result = await client.register(
             event_id="event-123",
             first_name="Иван",
