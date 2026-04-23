@@ -11,7 +11,7 @@ router = APIRouter(prefix="/api/events", tags=["events"])
 
 def get_provider_client():
     return EventsProviderClient(settings.PROVIDER_BASE_URL, settings.PROVIDER_API_KEY)
-
+@router.get("")
 @router.get("/")
 async def get_events(
     request: Request,
@@ -58,8 +58,8 @@ async def get_events(
             for e in events
         ]
     }
-
 @router.get("/{event_id}")
+@router.get("/{event_id}/")
 async def get_event_detail(
     event_id: str,
     db: AsyncSession = Depends(get_db)
@@ -85,8 +85,8 @@ async def get_event_detail(
         "status": event.status,
         "number_of_visitors": event.number_of_visitors
     }
-
 @router.get("/{event_id}/seats")
+@router.get("/{event_id}/seats/")
 async def get_available_seats(
     event_id: str,
     db: AsyncSession = Depends(get_db)

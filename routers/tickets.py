@@ -33,8 +33,8 @@ async def register_ticket(
         seat=request.seat
     )
     return {"ticket_id": ticket_id}
-
 @router.delete("/tickets/{ticket_id}")
+@router.delete("/tickets/{ticket_id}/")
 async def cancel_ticket(
     ticket_id: str,
     db: AsyncSession = Depends(get_db)
