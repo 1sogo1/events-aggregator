@@ -37,7 +37,7 @@ class EventsProviderClient:
                 headers={"x-api-key": self.api_key}
             )
             response.raise_for_status()
-            return await response.json()
+            return response.json()
     
     async def register(self, event_id: str, first_name: str, last_name: str, email: str, seat: str) -> Dict[str, Any]:
         url = urljoin(self.base_url + '/', f'/api/events/{event_id}/register/')

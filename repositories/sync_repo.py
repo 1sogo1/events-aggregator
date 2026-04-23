@@ -31,7 +31,7 @@ class SyncRepository:
     ):
         metadata = await self.get_metadata()
         
-        metadata.last_sync_at = datetime.now(timezone.utc) #type: ignore
+        metadata.last_sync_at = datetime.now(timezone.utc).replace(tzinfo=None) #type: ignore
         metadata.sync_status = status #type: ignore
         metadata.error_message = error_message #type: ignore
          
