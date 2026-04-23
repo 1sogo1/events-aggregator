@@ -38,8 +38,8 @@ async def get_events(
     
     return {
         "count": total,
-        "next": next_url,
-        "previous": prev_url,
+        "next": None,
+        "previous": None,
         "results": [
             {
                 "id": e.id,
