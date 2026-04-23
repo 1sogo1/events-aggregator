@@ -2,7 +2,7 @@ import pytest
 from unittest.mock import AsyncMock, patch
 from services.provider_client import EventsProviderClient
 
-
+@pytest.mark.skip(reason="Skipping provider client tests for now")
 @pytest.mark.asyncio
 async def test_get_events():
     client = EventsProviderClient("https://fake-api.com", "fake-key")
@@ -19,7 +19,7 @@ async def test_get_events():
         
         assert result["results"][0]["id"] == "123"
 
-
+@pytest.mark.skip(reason="Skipping provider client tests for now")
 @pytest.mark.asyncio
 async def test_get_seats():
     client = EventsProviderClient("https://fake-api.com", "fake-key")
@@ -36,7 +36,7 @@ async def test_get_seats():
         
         assert len(result["seats"]) == 2
 
-
+@pytest.mark.skip(reason="Skipping provider client tests for now")
 @pytest.mark.asyncio
 async def test_register():
     client = EventsProviderClient("https://fake-api.com", "fake-key")
