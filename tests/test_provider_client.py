@@ -8,7 +8,7 @@ async def test_get_events():
     client = EventsProviderClient("https://fake-api.com", "fake-key")
     
     mock_response = AsyncMock()
-    mock_response.json.return_value = {"results": [{"id": "123"}], "next": None}
+    mock_response.json = AsyncMock(return_value={"results": [{"id": "123"}], "next": None})
     mock_response.raise_for_status = AsyncMock()
     
     with patch("httpx.AsyncClient.get", return_value=mock_response):
@@ -22,7 +22,7 @@ async def test_get_seats():
     client = EventsProviderClient("https://fake-api.com", "fake-key")
     
     mock_response = AsyncMock()
-    mock_response.json.return_value = {"seats": ["A1", "A2"]}
+    mock_response.json = AsyncMock(return_value={"seats": ["A1", "A2"]})
     mock_response.raise_for_status = AsyncMock()
     
     with patch("httpx.AsyncClient.get", return_value=mock_response):
@@ -36,7 +36,7 @@ async def test_register():
     client = EventsProviderClient("https://fake-api.com", "fake-key")
     
     mock_response = AsyncMock()
-    mock_response.json.return_value = {"ticket_id": "ticket-456"}
+    mock_response.json = AsyncMock(return_value={"ticket_id": "ticket-456"})
     mock_response.raise_for_status = AsyncMock()
     
     with patch("httpx.AsyncClient.post", return_value=mock_response):
